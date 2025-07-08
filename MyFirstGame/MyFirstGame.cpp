@@ -155,7 +155,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
        else
        {
            //ゲームの処理
-           Camera::Update();
+          // Camera::Update();
            Direct3D::BeginDraw();
 
            //描画処理

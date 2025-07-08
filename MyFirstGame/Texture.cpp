@@ -10,6 +10,7 @@
 using namespace DirectX;
 
 Texture::Texture()
+    :pSampler_(nullptr),pSRV_(nullptr)
 {
 }
 
