@@ -5,5 +5,13 @@
 class Dice :
     public Quad
 {
+	Texture* pDiceTexture_;
+
+public:
+	Dice();
+	~Dice();
+	HRESULT Initialize();
+	void Draw(XMMATRIX& worldMatrix);
+	void Release();
 };
 
