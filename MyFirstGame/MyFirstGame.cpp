@@ -133,6 +133,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
    MSG msg;
    ZeroMemory(&msg, sizeof(msg));
+   Camera::Initialize();
 
    Quad* q = new Quad();
    hr = q->Initialize();
@@ -155,7 +156,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
        else
        {
            //ゲームの処理
-           //Camera::Update();
+           Camera::Update();
            Direct3D::BeginDraw();
 
            //描画処理
