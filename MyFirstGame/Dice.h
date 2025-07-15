@@ -10,8 +10,8 @@ class Dice :
 public:
 	Dice();
 	~Dice();
-	HRESULT Initialize();
-	void Draw(XMMATRIX& worldMatrix);
+	HRESULT Initialize() override;
+	void Draw(XMMATRIX& worldMatrix) override;
 	void Release();
 };
 

@@ -6,6 +6,7 @@
 #include "Direct3D.h"
 #include "Quad.h"
 #include "Camera.h"
+#include "Dice.h"
 
 //HWND hWnd = nullptr;
 
@@ -135,8 +136,12 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    ZeroMemory(&msg, sizeof(msg));
    Camera::Initialize();
 
-   Quad* q = new Quad();
-   hr = q->Initialize();
+   /*Quad* q = new Quad();
+   hr = q->Initialize();*/
+
+   Dice* dice = new Dice();
+   hr = dice->Initialize();
+
    if (FAILED(hr))
    {
        return 0;
@@ -160,15 +165,21 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
            Direct3D::BeginDraw();
 
            //描画処理
-           XMMATRIX mat = XMMatrixRotationY(XMConvertToRadians(45));
-           q->Draw(mat);
+           static float angle = 0.0f;
+           XMMATRIX mat = XMMatrixRotationY(XMConvertToRadians(angle));
+           //q->Draw(mat);
+           dice->Draw(mat);
+           angle += 0.05f;
 
            Direct3D::EndDraw();
        }
    }
 
-   q->Release();
-   SAFE_DELETE(q);
+   /*q->Release();
+   SAFE_DELETE(q);*/
+
+   dice->Release();
+   SAFE_DELETE(dice);
 
    Direct3D::Release();
 
