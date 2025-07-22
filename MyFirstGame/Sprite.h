@@ -22,11 +22,11 @@ struct VERTEX
 
 class Texture;
 
-class Quad
+class Sprite
 {
 public:
-	Quad();
-	virtual ~Quad();
+	Sprite();
+	virtual ~Sprite();
 	virtual HRESULT Initialize();
 	virtual void Draw(XMMATRIX& worldMatrix);
 	void Release();
