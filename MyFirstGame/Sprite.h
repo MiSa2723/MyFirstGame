@@ -5,11 +5,16 @@
 using namespace DirectX;
 
 //コンスタントバッファ
+//struct CONSTANT_BUFFER
+//{
+//	XMMATRIX matWVP;	//world * view * projectionの行列
+//	XMMATRIX matW;		//法線変換用の行列
+//	XMMATRIX matWorld;	//ワールド行列
+//};
+
 struct CONSTANT_BUFFER
 {
-	XMMATRIX matWVP;	//world*view*projectionの行列
-	XMMATRIX matW;		//法線変換用の行列
-	XMMATRIX matWorld;	//ワールド行列
+	DirectX::XMMATRIX matWorld; //ワールド行列
 };
 
 //頂点情報
@@ -17,7 +22,7 @@ struct VERTEX
 {
 	XMVECTOR position;
 	XMVECTOR uv;
-	XMVECTOR normal;
+	//XMVECTOR normal;
 };
 
 class Texture;
@@ -38,4 +43,5 @@ protected:
 	Texture* pTexture_;
 
 private:
+
 };

@@ -7,7 +7,7 @@ using namespace DirectX;
 //コンスタントバッファ
 struct CONSTANT_BUFFER
 {
-	XMMATRIX matWVP;	//world*view*projectionの行列
+	XMMATRIX matWVP;	//world * view * projectionの行列
 	XMMATRIX matW;		//法線変換用の行列
 	XMMATRIX matWorld;	//ワールド行列
 };

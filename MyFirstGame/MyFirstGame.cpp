@@ -4,11 +4,12 @@
 #include "framework.h"
 #include "MyFirstGame.h"
 #include "Direct3D.h"
-#include "Quad.h"
+//#include "Quad.h"
 #include "Camera.h"
-#include "Dice.h"
+//#include "Dice.h"
+#include "Sprite.h"
 
-//HWND hWnd = nullptr;
+HWND hWnd = nullptr;
 
 
 #define MAX_LOADSTRING 100
@@ -62,6 +63,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     {
         return FALSE;
     }
+
 }
 
 
@@ -139,8 +141,11 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    /*Quad* q = new Quad();
    hr = q->Initialize();*/
 
-   Dice* dice = new Dice();
-   hr = dice->Initialize();
+  /* Dice* dice = new Dice();
+   hr = dice->Initialize();*/
+
+   Sprite* sprite = new Sprite();
+   hr = sprite->Initialize();
 
    if (FAILED(hr))
    {
@@ -165,11 +170,18 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
            Direct3D::BeginDraw();
 
            //描画処理
-           static float angle = 0.0f;
-           XMMATRIX mat = XMMatrixRotationY(XMConvertToRadians(angle));
+           /*static float angle = 0.0f;
+           XMMATRIX mat = XMMatrixRotationY(XMConvertToRadians(angle));*/
            //q->Draw(mat);
-           dice->Draw(mat);
-           angle += 0.05f;
+           //dice->Draw(mat);
+           //sprite->Draw(mat);
+           //angle += 0.05f;
+
+           Transform trans;
+           trans.position_.x =
+               trans.rotate_.z =
+               trans.Calclation();
+           sprite->Draw(trans.GetWorldMatrix());
 
            Direct3D::EndDraw();
        }
@@ -178,8 +190,11 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    /*q->Release();
    SAFE_DELETE(q);*/
 
-   dice->Release();
-   SAFE_DELETE(dice);
+   /*dice->Release();
+   SAFE_DELETE(dice);*/
+
+   sprite->Release();
+   SAFE_DELETE(sprite);
 
    Direct3D::Release();
 

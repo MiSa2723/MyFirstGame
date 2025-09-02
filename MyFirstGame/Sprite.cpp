@@ -19,15 +19,17 @@ HRESULT Sprite::Initialize()
 
 	VERTEX vertices[] =
 	{
-		{ XMVectorSet(-1.0f,  1.0f, 0.0f, 0.0f),XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f) },   // 四角形の頂点（左上）
-		{ XMVectorSet(1.0f,  1.0f, 0.0f, 0.0f),	XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f) },   // 四角形の頂点（右上）
-		{ XMVectorSet(1.0f, -1.0f, 0.0f, 0.0f),	XMVectorSet(1.0f, 1.0f, 0.0f, 0.0f) },   // 四角形の頂点（右下）
-		{ XMVectorSet(-1.0f, -1.0f, 0.0f, 0.0f),XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f) },   // 四角形の頂点（左下）
+		//{{position}, {uv}}
+		{{ -1.0f,  1.0f, 0.0f, 0.0f}, {0.0f,  0.0f}},// 四角形の頂点（左上）
+		{{  1.0f,  1.0f, 0.0f, 0.0f}, {1.0f,  0.0f}},// 四角形の頂点（右上）
+		{{  1.0f, -1.0f, 0.0f, 0.0f}, {1.0f,  1.0f}},// 四角形の頂点（右下）
+		{{ -1.0f, -1.0f, 0.0f, 0.0f}, {0.0f,  1.0f}}	// 四角形の頂点（左下）	}
 	};
+	//const int numVertex = sizeof(vertices)/sizeof(vertices[0]);
 
 	// 頂点データ用バッファの設定
 	D3D11_BUFFER_DESC bd_vertex;
-	bd_vertex.ByteWidth = sizeof(vertices) * 4;
+	bd_vertex.ByteWidth = sizeof(vertices);
 	bd_vertex.Usage = D3D11_USAGE_DEFAULT;
 	bd_vertex.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	bd_vertex.CPUAccessFlags = 0;
@@ -43,8 +45,7 @@ HRESULT Sprite::Initialize()
 	}
 
 	//インデックス情報
-	int index[] = { 0,2,3, 0,1,2 };
-
+	int index[] = { 0,2,3, 0,1,2 }; //CW
 	// インデックスバッファを生成する
 	D3D11_BUFFER_DESC   bd;
 	bd.Usage = D3D11_USAGE_DEFAULT;
@@ -81,38 +82,24 @@ HRESULT Sprite::Initialize()
 		return hrSprite;
 	}
 
-	pTexture_ = new Texture;
-	pTexture_->Load("dice_image.png");
+	pTexture_ = new Texture();
+	pTexture_->Load("dice.png");
 
 	return S_OK;
 }
 
 void Sprite::Draw(XMMATRIX& worldMatrix)
 {
+	Direct3D::SetShader(SHADER_TYPE::SHADER_2D);
 	//コンスタントバッファに渡す情報
-	/*XMVECTOR position = {0, 3, -10, 0};	//カメラの位置
-	XMVECTOR target = { 0, 0, 0, 0 };	//カメラの焦点
-	XMMATRIX view = DirectX::XMMatrixLookAtLH(position, target, XMVectorSet(0, 1, 0, 0));	//ビュー行列
-	XMMATRIX proj = DirectX::XMMatrixPerspectiveFovLH(XM_PIDIV4, 800.0f / 600.0f, 0.1f, 100.0f);//射影行列
-
 	CONSTANT_BUFFER cb;
-	cb.matWVP = DirectX::XMMatrixTranspose(view * proj);
-	// */
+	//cb.matWVP = XMMatrixTranspose(worldMatrix * Camera::GetViewMatrix() * Camera::GetProjectionMatrix());
+	cb.matWorld = XMMatrixTranspose(worldMatrix);
+
 
 	D3D11_MAPPED_SUBRESOURCE pdata;
-	CONSTANT_BUFFER cb;
-	cb.matWVP = DirectX::XMMatrixTranspose(worldMatrix * Camera::GetViewMatrix() * Camera::GetProjectionMatrix());
-	//cb.matW = ●●●●●●●●●●●●●●●;
-	// */
 	Direct3D::pContext->Map(pConstantBuffer_, 0, D3D11_MAP_WRITE_DISCARD, 0, &pdata);	// GPUからのデータアクセスを止める
 	memcpy_s(pdata.pData, pdata.RowPitch, (void*)(&cb), sizeof(cb));	// データを値を送る
-
-	ID3D11SamplerState* pSampler = pTexture_->GetSampler();
-	Direct3D::pContext->PSSetSamplers(0, 1, &pSampler);
-
-	ID3D11ShaderResourceView* pSRV = pTexture_->GetSRV();
-	Direct3D::pContext->PSSetShaderResources(0, 1, &pSRV);
-
 	Direct3D::pContext->Unmap(pConstantBuffer_, 0);	//再開
 
 	//頂点バッファ
@@ -129,14 +116,17 @@ void Sprite::Draw(XMMATRIX& worldMatrix)
 	Direct3D::pContext->VSSetConstantBuffers(0, 1, &pConstantBuffer_);	//頂点シェーダー用	
 	Direct3D::pContext->PSSetConstantBuffers(0, 1, &pConstantBuffer_);	//ピクセルシェーダー用
 
+	ID3D11SamplerState* pSampler = pTexture_->GetSampler();
+	Direct3D::pContext->PSSetSamplers(0, 1, &pSampler);
+
+	ID3D11ShaderResourceView* pSRV = pTexture_->GetSRV();
+	Direct3D::pContext->PSSetShaderResources(0, 1, &pSRV);
+
 	Direct3D::pContext->DrawIndexed(6, 0, 0);
 }
 
 void Sprite::Release()
 {
-	pTexture_->Release();
-	SAFE_DELETE(pTexture_);
-
 	SAFE_RELEASE(pConstantBuffer_);
 	SAFE_RELEASE(pIndexBuffer_);
 	SAFE_RELEASE(pVertexBuffer_);

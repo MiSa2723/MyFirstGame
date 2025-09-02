@@ -5,7 +5,7 @@
 class Dice :
     public Quad
 {
-	Texture* pDiceTexture_;
+	//Texture* pDiceTexture_;
 
 public:
 	Dice();
