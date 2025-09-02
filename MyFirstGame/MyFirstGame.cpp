@@ -7,7 +7,9 @@
 //#include "Quad.h"
 #include "Camera.h"
 //#include "Dice.h"
-#include "Sprite.h"
+//#include "Sprite.h"
+#include "Transform.h"
+#include "Fbx.h"
 
 HWND hWnd = nullptr;
 
@@ -144,8 +146,11 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   /* Dice* dice = new Dice();
    hr = dice->Initialize();*/
 
-   Sprite* sprite = new Sprite();
-   hr = sprite->Initialize();
+  /* Sprite* sprite = new Sprite();
+   hr = sprite->Initialize();*/
+
+   Fbx* fbx = new Fbx();
+   fbx->Load("Oden.fbx");
 
    if (FAILED(hr))
    {
@@ -178,10 +183,11 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
            //angle += 0.05f;
 
            Transform trans;
-           trans.position_.x =
-               trans.rotate_.z =
-               trans.Calclation();
-           sprite->Draw(trans.GetWorldMatrix());
+           trans.position_.x = 1.0f;
+           trans.rotate_.z = 0.0f;
+           trans.Calculation();
+           //sprite->Draw(trans.GetWorldMatrix());
+           fbx->Draw(trans);
 
            Direct3D::EndDraw();
        }
@@ -193,8 +199,8 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    /*dice->Release();
    SAFE_DELETE(dice);*/
 
-   sprite->Release();
-   SAFE_DELETE(sprite);
+   /*sprite->Release();
+   SAFE_DELETE(sprite);*/
 
    Direct3D::Release();
 
